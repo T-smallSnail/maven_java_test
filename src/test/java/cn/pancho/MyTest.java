@@ -56,6 +56,12 @@ public class MyTest {
         System.out.println(s);
     }
 
+    /**
+     * 5G消息手机号登陆
+     * @author : pancho
+     * @date : 2020/11/11 18:38
+     * @return : void
+     */
     @Test
     public void fiveGMessage() throws Exception {
 
