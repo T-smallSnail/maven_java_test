@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>bmcc.vgop.parent</groupId>
+        <artifactId>bmcc_vgop_parent</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+
+    <groupId>com.pancho.java</groupId>
+    <artifactId>maven_java_test</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>war</packaging>
+
+
+    <properties>
+        <mybatis-plus-generator.version>3.1.2</mybatis-plus-generator.version>
+        <velocity-engine-core.version>2.1</velocity-engine-core.version>
+
+    </properties>
+
+
+    <dependencies>
+        <!-- https://mvnrepository.com/artifact/dom4j/dom4j -->
+        <dependency>
+            <groupId>dom4j</groupId>
+            <artifactId>dom4j</artifactId>
+            <version>1.6.1</version>
+        </dependency>
+
+
+        <!--CRM接口-->
+        <dependency>
+            <groupId>bmcc.vgop.frame.root</groupId>
+            <artifactId>bmcc_vgop_frame_crm_open_api</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
+        <!--bmcc.vgop.frame.root-->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>bmcc.vgop.frame.root</groupId>
+            <artifactId>bmcc_vgop_frame_base</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>bmcc.vgop.frame.root</groupId>
+            <artifactId>bmcc_vgop_frame_web</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>bmcc.vgop.frame.root</groupId>
+            <artifactId>bmcc_vgop_frame_mysql_hibernate</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>bmcc.vgop.frame.root</groupId>
+            <artifactId>bmcc_vgop_frame_db2_hibernate</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>bmcc.vgop.frame.root</groupId>
+            <artifactId>bmcc_vgop_frame_redis</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <!--<dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>5.2.0.RELEASE</version>
+        </dependency>-->
+
+
+        <!--mysql-mybatis-->
+        <dependency>
+            <groupId>bmcc.vgop.frame.root</groupId>
+            <artifactId>bmcc_vgop_frame_mysql_mybatis</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <!--mybatisplus,加入该jar后，就不再需要mybatis-xxx.jar,mybatis-spring-xxx.jar了，它们会以依赖包的形式被自动维护-->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-generator</artifactId>
+            <version>${mybatis-plus-generator.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.velocity</groupId>
+            <artifactId>velocity-engine-core</artifactId>
+            <version>${velocity-engine-core.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
+            <version>2.3.28</version>
+        </dependency>
+        <dependency>
+            <groupId>com.ibeetl</groupId>
+            <artifactId>beetl</artifactId>
+            <version>3.0.8.RELEASE</version>
+        </dependency>
+
+        <!--elasticsearch-->
+        <dependency>
+            <groupId>org.elasticsearch.client</groupId>
+            <artifactId>elasticsearch-rest-high-level-client</artifactId>
+            <version>${elasticsearchHigh.version}</version>
+        </dependency>
+
+        <!--Test-->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>5.0.5.RELEASE</version>
+        </dependency>
+
+
+
+        <!--Jedis-->
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <version>${jedis.version}</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml -->
+        <!--读取xlsx文件-->
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>3.17</version>
+        </dependency>
+
+
+        <!-- https://mvnrepository.com/artifact/com.alibaba/fastjson -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.62</version>
+        </dependency>
+
+
+
+    </dependencies>
+
+
+
+    <build>
+        <finalName>maven_java_test</finalName>
+
+        <resources>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.xml</include> <!-- 配置所有都不是资源文件 -->
+                </includes>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>**/*</include><!-- 指定config/环境/*.properties为资源文件 -->
+                </includes>
+            </resource>
+            <resource>
+                <directory>src/main/resources/config/${profiles.active}</directory>
+                <includes>
+                    <include>**/*.properties</include><!-- 指定config/环境/*.properties为资源文件 -->
+                </includes>
+                <filtering>true</filtering><!-- 编译传值时，是否替换需要替换占位符,${xxx} -->
+                <targetPath>config</targetPath>
+            </resource>
+        </resources>
+    </build>
+
+
+</project>

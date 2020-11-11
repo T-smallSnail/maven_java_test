@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+
+    <contextListener class="com.bmcc.vgop.common.web.listener.LoggerStartupListener" />
+
+    <if condition='property("active").contains("dev")'>
+        <then><!-- 测试环境输出到控制台 -->
+            <appender name="system_console_Appender" class="ch.qos.logback.core.ConsoleAppender">
+                <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+                    <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} ${logContext} [%thread] %-5level %logger - %msg%n</pattern>
+                </encoder>
+            </appender>
+
+            <root level="INFO">
+                <appender-ref ref="system_console_Appender" />
+            </root>
+        </then>
+        <else><!-- 测试环境，生产环境输出到文件 -->
+            <!-- info级文件日志 -->
+            <appender name="system_file_info_Appender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+                <filter class="ch.qos.logback.classic.filter.LevelFilter">
+                    <level>INFO</level>
+                    <onMatch>ACCEPT</onMatch>
+                    <onMismatch>DENY</onMismatch>
+                </filter>
+                <file>${logHome}/${logContext}_info.log</file>
+                <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+                    <fileNamePattern>${logHome}/${logContext}-%d{yyyy-MM-dd}.%i.log_info.zip</fileNamePattern>
+                    <maxFileSize>50MB</maxFileSize>
+                    <maxHistory>30</maxHistory>
+                    <totalSizeCap>20480MB</totalSizeCap>
+                </rollingPolicy>
+                <encoder>
+                    <Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} ${logContext} [%thread] %-5level %logger - %msg%n</Pattern>
+                </encoder>
+            </appender>
+
+            <!-- warn级以上文件日志 -->
+            <appender name="system_file_warn_Appender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+                <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+                    <level>WARN</level>
+                </filter>
+                <file>${logHome}/${logContext}_warn.log</file>
+                <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+                    <fileNamePattern>${logHome}/${logContext}-%d{yyyy-MM-dd}.%i.log_warn.zip</fileNamePattern>
+                    <maxFileSize>50MB</maxFileSize>
+                    <maxHistory>30</maxHistory>
+                    <totalSizeCap>20480MB</totalSizeCap>
+                </rollingPolicy>
+                <encoder>
+                    <Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} ${logContext} [%thread] %-5level %logger - %msg%n</Pattern>
+                </encoder>
+            </appender>
+
+            <appender name="system_file_info_async_Appender" class="ch.qos.logback.classic.AsyncAppender">
+                <appender-ref ref="system_file_info_Appender" />
+            </appender>
+            <appender name="system_file_warn_async_Appender" class="ch.qos.logback.classic.AsyncAppender">
+                <appender-ref ref="system_file_warn_Appender" />
+            </appender>
+
+            <root level="INFO">
+                <appender-ref ref="system_file_info_async_Appender" />
+                <appender-ref ref="system_file_warn_Appender" />
+            </root>
+        </else>
+    </if>
+</configuration>
