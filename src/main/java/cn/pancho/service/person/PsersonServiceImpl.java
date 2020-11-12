@@ -1,7 +1,8 @@
 package cn.pancho.service.person;
 
-import cn.pancho.vgop.data.mapper.PersonDao;
-import cn.pancho.vgop.data.person.po.Person;
+
+import cn.pancho.data.entity.Person;
+import cn.pancho.data.mapper.PersonDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

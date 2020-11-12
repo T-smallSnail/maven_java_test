@@ -13,7 +13,7 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 @Configuration
 
 /*设置spring管理bean扫描范围*/
-@ComponentScan("cn.pancho.vgop")
+@ComponentScan("cn.pancho")
 
 /*配置环境*/
 @PropertySource(value={"classpath:"+SysBaseConsts.APP_CONFIG},ignoreResourceNotFound=false,encoding=SysBaseConsts.CHAR_SET)

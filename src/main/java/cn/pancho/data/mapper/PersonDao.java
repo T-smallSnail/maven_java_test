@@ -1,7 +1,7 @@
 package cn.pancho.data.mapper;
 
 
-import cn.pancho.vgop.data.person.po.Person;
+import cn.pancho.data.entity.Person;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import config.annotation.MysqlMapper;
 import org.apache.ibatis.annotations.Insert;
