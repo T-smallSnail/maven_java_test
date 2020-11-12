@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="cn.pancho.vgop.data.mapper.PersonDao">
+<mapper namespace="cn.pancho.data.mapper.PersonDao">
 
 
 
     <!-- 通用查询结果列 -->
-    <select id="findPersonById" parameterType="int" resultType="cn.pancho.vgop.data.person.po.Person">
+    <select id="findPersonById" parameterType="int" resultType="cn.pancho.data.entity.Person">
         select * from person where id=#{id}
     </select>
 
