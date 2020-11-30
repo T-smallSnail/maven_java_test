@@ -152,6 +152,7 @@ public class CrmTestInMain {
         return encryptionContent;
     }
 
+    
 
     private static Map<String, String> getSystemParamMap(String method, String timestamp, String busiSerial) {
         Map<String, String> sysParam = new HashMap<String, String>();
