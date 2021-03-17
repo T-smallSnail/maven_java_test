@@ -23,9 +23,9 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 
 
 
-@Import(value = {BaseConfig.class,WebConfig.class,MysqlConfig.class,BaseWebConfig.class})
+@Import(value = {BaseConfig.class,MysqlConfig.class,WebConfig.class,BaseWebConfig.class})
 public class AppConfig {
-	
+
 	@Bean
 	public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
 		return new PropertySourcesPlaceholderConfigurer();
