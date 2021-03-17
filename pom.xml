@@ -140,11 +140,15 @@
             <version>1.2.62</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-all</artifactId>
+            <version>1.2.4</version>
+        </dependency>
+
 
 
     </dependencies>
-
-
 
     <build>
         <finalName>maven_java_test</finalName>
