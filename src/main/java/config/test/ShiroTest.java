@@ -30,7 +30,7 @@ public class ShiroTest {
     public void savePerson() {
 
         Person p = new Person();
-        p.setAddress("光山2");
+
         p.setLastName("32");
         p.setLastName("23");
         personDao.insert(p);
