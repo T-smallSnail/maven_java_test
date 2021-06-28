@@ -1,8 +1,11 @@
 package cn.pancho;
 
 
+import cn.pancho.data.entity.Person;
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.bmcc.vgop.common.object.web.ajax.ResultData;
 import com.bmcc.vgop.common.object.web.http.HttpRequestObj;
 import com.bmcc.vgop.common.utils.date.DateUtils;
 import com.bmcc.vgop.common.utils.encrypt.AesUtils;
@@ -10,17 +13,21 @@ import com.bmcc.vgop.common.utils.encrypt.MD5Utils;
 import com.bmcc.vgop.common.utils.encrypt.SignUtils;
 import com.bmcc.vgop.common.utils.encrypt.TripleDES;
 import com.bmcc.vgop.common.utils.http.HttpUtils;
+import com.bmcc.vgop.common.utils.log.LogUtils;
 import com.bmcc.vgop.common.utils.string.JsonUtils;
 import com.bmcc.vgop.common.utils.string.StringUtils;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.elasticsearch.common.logging.JsonThrowablePatternConverter;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
@@ -36,10 +43,28 @@ import java.util.Map;
  */
 public class MyTest {
 
+
+    public static String aes(String appId,String appKey) throws Exception {
+
+        String text = appId + System.currentTimeMillis();
+
+        String aseKey = MD5Utils.encode(appKey).toUpperCase().substring(3, 19);
+        String Authorization = AesUtils.encryptBase64Mode(aseKey, text);
+        System.out.println("aesKey=" + aseKey);
+        System.out.println("Authorization==" + Authorization);
+        return Authorization;
+    }
+
+    /**
+     * aes加密
+     * @author : pancho
+     * @date : 2021/6/9 10:53
+     * @return : void
+     */
     @Test
     public void aes() throws Exception {
         String appId = "100001";
-        String text = appId + "2616140552099";
+        String text = appId + System.currentTimeMillis();
         String appKey = "12ccb97166b44f85a04338d043e9ef90";
         String aseKey = MD5Utils.encode(appKey).toUpperCase().substring(3, 19);
         String Authorization = AesUtils.encryptBase64Mode(aseKey, text);
@@ -147,26 +172,27 @@ public class MyTest {
 
     /**
      * 乐淘结构数据解析
+     *
+     * @return : void
      * @author : pancho
      * @date : 2021/3/18 19:01
-     * @return : void
      */
     @Test
     public void sf() throws UnsupportedEncodingException {
 
-        String expTime = "{\"message\":\"操作成功\",\"code\":0,\"data\":[{\"coupon\":{\"couponManageId\":\"822124108882952192\",\"otherOrderId\":\"12342400012134300017\",\"couponName\":\"微信10元代金券【北京乐淘测试】\",\"orderId\":\"822124108841009152\",\"validityUse\":\"2021.04.02\",\"couponCode\":\"17493115\",\"activeCode\":\"\"},\"recharge\":{\"rstCode\":\"90\",\"rstMsg\":\"充值接口调用失败，返回信息:appid与openid不匹配\"}}]}";
+        String response = "{\"message\":\"操作成功\",\"code\":0,\"data\":[{\"coupon\":{\"couponManageId\":\"822124108882952192\",\"otherOrderId\":\"12342400012134300017\",\"couponName\":\"微信10元代金券【北京乐淘测试】\",\"orderId\":\"822124108841009152\",\"validityUse\":\"2021.04.02\",\"couponCode\":\"17493115\",\"activeCode\":\"\"},\"recharge\":{\"rstCode\":\"90\",\"rstMsg\":\"充值接口调用失败，返回信息:appid与openid不匹配\"}}]}";
 
-        Map<String, Object> jsonMap = JsonUtils.getJsonMap(expTime);
+        Map<String, Object> jsonMap = JsonUtils.getJsonMap(response);
         String message = jsonMap.get("message").toString();
         Integer code = Integer.valueOf(jsonMap.get("code").toString());
-        List<Map<String,Object>> data = (List<Map<String, Object>>) jsonMap.get("data");
+        List<Map<String, Object>> data = (List<Map<String, Object>>) jsonMap.get("data");
 
 
-        Map<String,String> rechargeMap = (Map<String, String>) data.get(0).get("recharge");
+        Map<String, String> rechargeMap = (Map<String, String>) data.get(0).get("recharge");
         String rstCode = rechargeMap.get("rstCode");
         String rstMsg = rechargeMap.get("rstMsg");
 
-        Map<String,String> couponMap = (Map<String, String>) data.get(0).get("coupon");
+        Map<String, String> couponMap = (Map<String, String>) data.get(0).get("coupon");
         String orderId = couponMap.get("orderId");
         String otherOrderId = couponMap.get("otherOrderId");
         String couponManageId = couponMap.get("couponManageId");
@@ -181,10 +207,10 @@ public class MyTest {
     /**
      * 参数签名(乐淘调用恒通接口)
      *
-     * @author : pancho
-     * @date : 2021/3/18 19:02
      * @param : args
      * @return : void
+     * @author : pancho
+     * @date : 2021/3/18 19:02
      */
     @Test
     public void cyzSign() throws UnsupportedEncodingException, NoSuchAlgorithmException {
@@ -231,12 +257,12 @@ public class MyTest {
 
         //请求头
         Map<String, String> propertyMap = new HashMap<>();
-        propertyMap.put("Content-Type","application/json;charset=UTF-8");
-        propertyMap.put("accessToken","MjAyMTAzMDQ6VEVTVExFVEFPOmUyNmZjNmIzNWRkODQyM2JhZWI3M2NkYjVjYzY1MzNj");
-        propertyMap.put("appId","20210304");
-        propertyMap.put("apiVersion","v1.0");
-        propertyMap.put("timestamp",time.toString());
-        propertyMap.put("sign",signChe);
+        propertyMap.put("Content-Type", "application/json;charset=UTF-8");
+        propertyMap.put("accessToken", "MjAyMTAzMDQ6VEVTVExFVEFPOmUyNmZjNmIzNWRkODQyM2JhZWI3M2NkYjVjYzY1MzNj");
+        propertyMap.put("appId", "20210304");
+        propertyMap.put("apiVersion", "v1.0");
+        propertyMap.put("timestamp", time.toString());
+        propertyMap.put("sign", signChe);
 
 
         //请求参数
@@ -260,7 +286,6 @@ public class MyTest {
     }
 
 
-
     @Test
     public void getgdfgfh() throws UnsupportedEncodingException, NoSuchAlgorithmException, ParseException {
         Map<String, Object> map = new HashMap<>();
@@ -272,9 +297,9 @@ public class MyTest {
 
 
         String type = (String) null;
-        if (type!=null&&type.equals("1")) {
+        if (type != null && type.equals("1")) {
 
-        }else{
+        } else {
             System.out.println("12");
         }
 
@@ -285,17 +310,27 @@ public class MyTest {
 
     /**
      * 获取uuid
+     *
+     * @return : void
      * @author : pancho
      * @date : 2021/3/24 15:55
-     * @return : void
      */
     @Test
     public void getUUID() {
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 4; i++) {
             System.out.println(StringUtils.getUUID());
         }
 
     }
+
+
+    @Test
+    public void sfsdsdf() {
+        String orderJson = "{\"success\":true,\"data\":{\"isOrder\":1,\"orderList\":[{\"effTime\":\"2021-04-26 00:00:00\",\"expTime\":\"2021-05-25 23:59:59\"}]}}" ;
+
+
+    }
+
 
 
 }
